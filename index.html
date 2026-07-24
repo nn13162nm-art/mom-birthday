@@ -1,2 +1,406 @@
-# mom-birthday
-สำหรับแม่ของหนู
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุขสันต์วันเกิดคุณแม่คนเก่ง 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        body {
+            background-color: #0b0b0b;
+            color: #ffb6c1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        /* หน้าใส่รหัสผ่าน */
+        #login-screen {
+            text-align: center;
+            background: rgba(20, 20, 20, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 182, 193, 0.2);
+            border: 1px solid #ffb6c1;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        #login-screen h2 {
+            margin-bottom: 20px;
+            font-size: 22px;
+            color: #ffc0cb;
+        }
+
+        .pin-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .pin-input {
+            width: 40px;
+            height: 50px;
+            font-size: 24px;
+            text-align: center;
+            background: #1a1a1a;
+            border: 2px solid #ffb6c1;
+            color: #fff;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .pin-input:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 8px rgba(255, 105, 180, 0.5);
+        }
+
+        button.btn-pink {
+            background-color: #ffb6c1;
+            color: #0b0b0b;
+            border: none;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button.btn-pink:hover {
+            background-color: #ff69b4;
+            color: #fff;
+            box-shadow: 0 0 10px #ff69b4;
+        }
+
+        /* คอนเทนต์หลักซ่อนไว้ก่อน */
+        .main-content {
+            display: none;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* เค้กวันเกิดแอนิเมชัน */
+        .cake-container {
+            position: absolute;
+            top: 20%;
+            transition: all 1s ease;
+        }
+
+        .cake-container.move-down {
+            top: 65%;
+            transform: scale(0.6);
+        }
+
+        .cake-layer {
+            background: #ffb6c1;
+            margin: 0 auto;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 182, 193, 0.4);
+            animation: dropIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        .layer-3 { width: 160px; height: 40px; animation-delay: 0.2s; }
+        .layer-2 { width: 120px; height: 35px; animation-delay: 0.5s; background: #ffc0cb; }
+        .layer-1 { width: 80px; height: 30px; animation-delay: 0.8s; background: #ffe4e1; }
+
+        @keyframes dropIn {
+            0% { transform: translateY(-200px); opacity: 0; }
+            60% { transform: translateY(20px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* เทียน */
+        .candle {
+            width: 10px;
+            height: 30px;
+            background: #fff;
+            margin: 0 auto;
+            position: relative;
+            animation: dropIn 0.8s ease 1.1s forwards;
+            opacity: 0;
+        }
+
+        .flame {
+            width: 12px;
+            height: 20px;
+            background: #ff4500;
+            border-radius: 50% 50% 20% 20%;
+            position: absolute;
+            top: -18px;
+            left: -1px;
+            box-shadow: 0 0 10px #ff4500, 0 0 20px #ffffe0;
+            animation: flicker 0.5s infinite alternate;
+        }
+
+        .flame.extinguished {
+            display: none;
+        }
+
+        @keyframes flicker {
+            0% { transform: scale(1); opacity: 0.9; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .blow-btn {
+            margin-top: 15px;
+            background: transparent;
+            border: 1px solid #ffb6c1;
+            color: #ffb6c1;
+            padding: 5px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .blow-btn:hover {
+            background: #ffb6c1;
+            color: #0b0b0b;
+        }
+
+        /* ซองจดหมาย */
+        .envelope-wrapper {
+            position: absolute;
+            top: 35%;
+            display: none;
+            cursor: pointer;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .envelope {
+            width: 260px;
+            height: 180px;
+            background: #ffc0cb;
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 130px solid transparent;
+            border-right: 130px solid transparent;
+            border-top: 100px solid #ffb6c1;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        .heart-seal {
+            font-size: 24px;
+            z-index: 2;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        .envelope-text {
+            position: absolute;
+            bottom: -35px;
+            width: 100%;
+            text-align: center;
+            font-size: 14px;
+            color: #ffb6c1;
+            letter-spacing: 1px;
+        }
+
+        /* การ์ดข้อความอวยพร */
+        .card-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #141414;
+            border: 2px solid #ffb6c1;
+            padding: 30px;
+            width: 85%;
+            max-width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 182, 193, 0.4);
+            text-align: center;
+            z-index: 10;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card-modal.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .card-modal h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 38px;
+            color: #ffb6c1;
+            margin-bottom: 15px;
+        }
+
+        .card-modal p {
+            font-size: 15px;
+            color: #fce4ec;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .close-card {
+            background: #ffb6c1;
+            color: #0b0b0b;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- หน้าใส่รหัสผ่าน -->
+    <div id="login-screen">
+        <h2>💖 ป้อนรหัสวันเกิดแม่ (6 หลัก) 💖</h2>
+        <div class="pin-inputs">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+            <input type="password" maxlength="1" class="pin-input" inputmode="numeric" pattern="[0-9]*">
+        </div>
+        <button class="btn-pink" onclick="checkPin()">ยืนยัน</button>
+        <p id="error-msg" style="color: #ff6b6b; font-size: 13px; margin-top: 10px; display: none;">รหัสผ่านไม่ถูกต้อง ลองใหม่อีกครั้งนะจ๊ะ</p>
+    </div>
+
+    <!-- หน้าเนื้อหาเซอร์ไพรส์ -->
+    <div class="main-content" id="main-content" style="display: none;">
+        <!-- เค้ก -->
+        <div class="cake-container" id="cake-container">
+            <div class="candle">
+                <div class="flame" id="flame"></div>
+            </div>
+            <div class="cake-layer layer-1"></div>
+            <div class="cake-layer layer-2"></div>
+            <div class="cake-layer layer-3"></div>
+            <button class="blow-btn" id="blow-btn" onclick="blowCandle()">เป่าเทียน 🎂</button>
+        </div>
+
+        <!-- ซองจดหมาย -->
+        <div class="envelope-wrapper" id="envelope-wrapper" onclick="openEnvelope()">
+            <div class="envelope">
+                <div class="envelope-flap" id="envelope-flap"></div>
+                <div class="heart-seal">💖</div>
+            </div>
+            <div class="envelope-text">แตะที่ซองเพื่อเปิดความในใจ</div>
+        </div>
+    </div>
+
+    <!-- การ์ดอวยพร (Popup) -->
+    <div class="card-modal" id="card-modal">
+        <h1>Feliz Cumpleaños</h1>
+        <p>
+            สุขสันต์วันเกิดนะ "คุณแม่" คนเก่งของลูก 🌸<br>
+            ขอให้แม่มีความสุขมากๆ สุขภาพร่างกายแข็งแรง อยู่เป็นร่มโพธิ์ร่มไทรให้ลูกแบบนี้ไปนานๆ นะครับ/ค่ะ<br>
+            รักแม่ที่สุดในโลกเลย! 💕
+        </p>
+        <button class="close-card" onclick="closeCard()">ปิดการ์ด</button>
+    </div>
+
+    <script>
+        // กำหนดรหัสผ่าน 6 หลักตรงนี้ (ตัวอย่างตั้งเป็น วันเดือนปีเกิด เช่น 010165)
+        const CORRECT_PIN = "040820"; 
+
+        // ระบบข้ามช่องกรอกรหัสอัตโนมัติ
+        const inputs = document.querySelectorAll('.pin-input');
+        inputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length === 1 && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                }
+            });
+        });
+
+        // ฟังก์ชันตรวจสอบรหัสผ่าน
+        function checkPin() {
+            let enteredPin = "";
+            inputs.forEach(input => {
+                enteredPin += input.value;
+            });
+
+            if (enteredPin === CORRECT_PIN) {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'flex';
+            } else {
+                const errorMsg = document.getElementById('error-msg');
+                errorMsg.style.display = 'block';
+                inputs.forEach(input => input.value = '');
+                inputs[0].focus();
+            }
+        }
+
+        // ฟังก์ชันเป่าเทียน
+        function blowCandle() {
+            document.getElementById('flame').classList.add('extinguished');
+            document.getElementById('blow-btn').style.display = 'none';
+
+            // เลื่อนเค้กไปด้านล่าง
+            setTimeout(() => {
+                document.getElementById('cake-container').classList.add('move-down');
+            }, 500);
+
+            // แสดงซองจดหมายโผล่ขึ้นมา
+            setTimeout(() => {
+                document.getElementById('envelope-wrapper').style.display = 'block';
+            }, 1500);
+        }
+
+        // ฟังก์ชันเปิดซองจดหมาย
+        function openEnvelope() {
+            document.getElementById('envelope-flap').style.transform = 'rotateX(180deg)';
+            setTimeout(() => {
+                document.getElementById('card-modal').classList.add('show');
+            }, 600);
+        }
+
+        // ปิดการ์ด
+        function closeCard() {
+            document.getElementById('card-modal').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
